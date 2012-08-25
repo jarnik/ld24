@@ -53,6 +53,8 @@ class PlayState extends State
     override private function create():Void {
 
         addChild( alienLayer = new Sprite() );
+        alienLayer.y = 230;
+
         /*
         cases = [
             { // cheating wife, find father

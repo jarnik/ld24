@@ -87,6 +87,7 @@ class Alien extends Sprite
         antena.transform.colorTransform = new ColorTransform( 0.9, 0.6, 0.9 );
 
         skin.x = -32;
+        skin.y = -128;
         
         randomize();
 	}
@@ -116,7 +117,7 @@ class Alien extends Sprite
         body.transform.colorTransform = new ColorTransform( bodyColor[ 0 ], bodyColor[ 1 ], bodyColor[ 2 ] );
         spots.setFrame( config.body );
         var spotColor:Array<Float> = SPOT_COLORS[ config.spotColor ];
-        spots.transform.colorTransform = new ColorTransform( spotColor[ 0 ], spotColor[ 1 ], spotColor[ 2 ] );
+        spots.transform.colorTransform = new ColorTransform( spotColor[ 0 ], spotColor[ 1 ], spotColor[ 2 ], 0.8 );
         eyes.setFrame( config.eyes );
         horns.visible = config.horns;
         antena.visible = config.antena;
