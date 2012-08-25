@@ -19,8 +19,8 @@ import nme.text.TextFormat;
 import nme.events.KeyboardEvent;
 import nme.media.Sound;
 
-import jarnik.rooms.states.TitleState;
-import jarnik.rooms.states.State;
+import jarnik.ld24.states.TitleState;
+import jarnik.ld24.states.State;
 
 class Main extends Sprite 
 {
