@@ -114,6 +114,8 @@ class Alien extends Sprite
     public function setScale( scale:Float ):Void {
         skin.scaleX = scale;
         skin.scaleY = scale;
+        skin.x = -32*scale;
+        skin.y = -128*scale;
     }
 
     public static function getRandomConfig():AlienConfig {
