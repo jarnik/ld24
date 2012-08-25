@@ -1,0 +1,3 @@
+#rm Export/android/bin/bin/build*
+nme build build.nmml android
+
