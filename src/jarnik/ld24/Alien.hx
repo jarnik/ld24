@@ -95,19 +95,7 @@ class Alien extends Sprite
     public function randomize():Void {
         setConfig( getRandomConfig() );
     }
-
-    public static function getRandomConfig():AlienConfig {
-        return {
-            legs: Math.floor( 5 * Math.random() ),
-            body: Math.floor( 4 * Math.random() ),
-            bodyColor: Math.floor( Math.random() * BODY_COLORS.length ),
-            spotColor: Math.floor( Math.random() * SPOT_COLORS.length ),
-            eyes: Math.floor( 5 * Math.random() ),
-            horns: (Math.random() > 0.5 ),
-            antena: (Math.random() > 0.5 )
-        };
-    }
-
+  
     public function setConfig( config:AlienConfig ):Void {
         this.config = config;
 
@@ -121,6 +109,23 @@ class Alien extends Sprite
         eyes.setFrame( config.eyes );
         horns.visible = config.horns;
         antena.visible = config.antena;
+    }
+
+    public function setScale( scale:Float ):Void {
+        skin.scaleX = scale;
+        skin.scaleY = scale;
+    }
+
+    public static function getRandomConfig():AlienConfig {
+        return {
+            legs: Math.floor( 5 * Math.random() ),
+            body: Math.floor( 4 * Math.random() ),
+            bodyColor: Math.floor( Math.random() * BODY_COLORS.length ),
+            spotColor: Math.floor( Math.random() * SPOT_COLORS.length ),
+            eyes: Math.floor( 5 * Math.random() ),
+            horns: (Math.random() > 0.5 ),
+            antena: (Math.random() > 0.5 )
+        };
     }
 
     public static function breed( father:AlienConfig, mother:AlienConfig ):AlienConfig {

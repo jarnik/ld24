@@ -41,7 +41,7 @@ typedef GroupConfig = {
 
 class PlayState extends State 
 {
-    private var title:Bitmap;
+    private var marker:Bitmap;
     private var aliens:Array<Alien>;
     private var alienLayer:Sprite;
 
@@ -54,6 +54,8 @@ class PlayState extends State
 
         addChild( alienLayer = new Sprite() );
         alienLayer.y = 230;
+
+        addChild( marker = new Bitmap(Assets.getBitmapData( "assets/marker.png" ), nme.display.PixelSnapping.AUTO, false ) );
 
         /*
         cases = [
@@ -170,7 +172,7 @@ class PlayState extends State
         createScene( {
             count: 5,
             select: 1,
-            size: 1,
+            size: 0.5,
             xscatter: 1,
             yscatter: 1,
             match: FIND_FATHER
@@ -209,6 +211,7 @@ class PlayState extends State
             alien.setConfig( alienConfig );
             alien.x = margin + aliens.length * stride + (Math.random()*2-1)*config.xscatter*30;
             alien.y = (Math.random()*2-1)*config.yscatter*20;
+            alien.setScale( config.size );
             aliens.push( alien );
             alienLayer.addChild( alien );
         }
