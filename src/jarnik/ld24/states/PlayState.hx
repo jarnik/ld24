@@ -30,6 +30,12 @@ enum MATCH_TYPE {
     FIND_FATHER;
 }
 
+typedef PhotoConfig = {    
+    var alien:AlienConfig;
+    var name:String;
+    var scale:Float;
+}
+
 typedef GroupConfig = {
     var count:Int;
     var select:Int;
@@ -45,10 +51,12 @@ class PlayState extends State
     private var thumbs:Array<Sprite>;
     private var currentMarker:Int;
     private var aliens:Array<Alien>;
+    private var selected:Array<Alien>;
     private var alienLayer:Sprite;
+    private var okbutton:Sprite;
     private var config:GroupConfig;
     private var photo:Photo;
-    private var photos:Array<AlienConfig>;
+    private var photos:Array<PhotoConfig>;
 
 	public function new () 
 	{
@@ -58,7 +66,7 @@ class PlayState extends State
     override private function create():Void {
 
         addChild( alienLayer = new Sprite() );
-        alienLayer.y = 230;
+        alienLayer.y = 210;
 
         var marker:Bitmap;
         markers = [];
@@ -85,6 +93,14 @@ class PlayState extends State
             thumbs.push( thumb );
             thumb.visible = false;
         }
+        
+        addChild( okbutton = new Sprite() );
+        okbutton.addChild( new Bitmap(Assets.getBitmapData( "assets/okbutton.png" ), nme.display.PixelSnapping.AUTO, false ) );
+        okbutton.x = (Main.w - okbutton.width)/2;
+        okbutton.y = 220;
+        okbutton.addEventListener( MouseEvent.CLICK, okClickHandler );
+        okbutton.visible = false;
+
         addChild( photo = new Photo() );
         photo.hide();
         photo.addEventListener( MouseEvent.CLICK, photoClickHandler );
@@ -203,7 +219,7 @@ class PlayState extends State
     override private function reset():Void {
         createScene( {
             count: 5,
-            select: 2,
+            select: 1,
             size: 0.5,
             xscatter: 0,
             yscatter: 0,
@@ -222,8 +238,8 @@ class PlayState extends State
         var child:AlienConfig = Alien.breed(father, mother);
         switch ( config.match ) {
             case FIND_FATHER:
-                photos.push( mother );
-                photos.push( child );
+                photos.push( { alien:mother, name:"Mother", scale:1 } );
+                photos.push( { alien:child, name:"Child", scale:0.5 } );
                 alienConfigs.push( father );
         }
         while ( alienConfigs.length < config.count ) {
@@ -249,7 +265,6 @@ class PlayState extends State
             alien.setScale( config.size );
             alien.visible = true;
         }
-        setMarker( aliens[0] );
 
         var thumb:Sprite;
         for ( i in 0...thumbs.length ) {
@@ -262,6 +277,8 @@ class PlayState extends State
             thumb.y = 5;
             thumb.visible = true;
         }
+        okbutton.visible = false;
+        selected = [];
     }
 
     private function setMarker( a:Alien ):Void {
@@ -327,6 +344,23 @@ class PlayState extends State
         }
     }
 
+    private function checkComplete():Void {
+        var done:Bool = false;
+        switch ( config.match ) {
+            case FIND_FATHER:
+               Main.log("equaling "+photos[1].alien+" and "+Alien.breed( selected[ 0 ].config, photos[0].alien ));
+               done = Alien.equal( photos[1].alien, Alien.breed( selected[ 0 ].config, photos[0].alien ) ); 
+        }
+        Main.log("done? "+done);
+    }
+
+    private function okClickHandler( e:MouseEvent ):Void {
+        if ( !okbutton.visible )
+            return;
+        Main.log("clicked OK!");
+        checkComplete();
+    }
+
     private function photoClickHandler( e:MouseEvent ):Void {
         if ( photo.visible ) {
             photo.hide();
@@ -337,14 +371,21 @@ class PlayState extends State
         if ( !e.target.visible )
             return;
         Main.log( "alien clicked "+e.target );
+        selected[ currentMarker ] = e.target;
         setMarker( e.target );
+        okbutton.visible = ( markers[ config.select-1 ].visible ) ;
     }
 
     private function thumbClickHandler( e:MouseEvent ):Void {        
         if ( !e.target.visible )
             return;
-        Main.log( "thumb clicked "+e.target );
-        photo.show( null, "aa" );
-        //setMarker( e.target );
+        var index:Int = -1;
+        for ( i in 0...thumbs.length )
+            if ( thumbs[i] == e.target )
+                index = i;
+        if ( index == -1 )
+            return;
+
+        photo.show( photos[ index ].alien, photos[ index ].name, photos[ index ].scale );
     }
 }

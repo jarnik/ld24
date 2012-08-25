@@ -145,4 +145,16 @@ class Alien extends Sprite
         };
     }
 
+    public static function equal( a:AlienConfig, b:AlienConfig ):Bool {
+        return (
+            a.legs == b.legs &&
+            a.body == b.body &&
+            a.bodyColor == b.bodyColor &&
+            a.spotColor == b.spotColor &&
+            a.eyes == b.eyes &&
+            a.horns == b.horns &&
+            a.antena == b.antena
+        );
+    }
+
 }

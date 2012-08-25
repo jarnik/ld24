@@ -65,8 +65,9 @@ class Photo extends Sprite
         tf.y = 187;
 	}
 
-    public function show( config:AlienConfig, text:String ):Void {
-        //alien.setConfig( config );
+    public function show( config:AlienConfig, text:String, scale:Float ):Void {
+        alien.setConfig( config );
+        alien.setScale( scale );
         tf.text = text;
         visible = true;
     }
