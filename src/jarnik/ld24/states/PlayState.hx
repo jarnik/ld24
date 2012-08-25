@@ -171,8 +171,8 @@ class PlayState extends State
             count: 5,
             select: 1,
             size: 1,
-            xscatter: 0,
-            yscatter: 0,
+            xscatter: 1,
+            yscatter: 1,
             match: FIND_FATHER
         } );
     }
@@ -181,22 +181,36 @@ class PlayState extends State
         Main.log( "createScene " );
         while ( alienLayer.numChildren > 0 )
             alienLayer.removeChildAt( 0 );
-        aliens = [];
-        var alien:Alien;
-        for ( i in 0...3 ) {
-            alien = new Alien();
-            alien.randomize();
-            aliens.push( alien );
+        
+        var photos:Array<AlienConfig> = [];
+        var alienConfigs:Array<AlienConfig> = [];
+        var father:AlienConfig = Alien.getRandomConfig();
+        var mother:AlienConfig = Alien.getRandomConfig();
+        var child:AlienConfig = Alien.breed(father, mother);
+        switch ( config.match ) {
+            case FIND_FATHER:
+                photos.push( mother );
+                photos.push( child );
+                alienConfigs.push( father );
         }
-        var mandatory:Array<AlienConfig> = [];
-        var margin:Float = 130;
-        var stride:Float = Math.min( 80, (Main.w - margin*2) / ( aliens.length - 1) );
-        margin = (Main.w - (aliens.length - 1)*stride) / 2;
-        for ( i in 0...aliens.length ) {
-            Main.log( "createScene "+i );
-            alien = aliens[ i ];
+        while ( alienConfigs.length < config.count ) {
+            alienConfigs.push( Alien.getRandomConfig() );
+        }
+
+        var margin:Float = 100;
+        var stride:Float = Math.min( 160, (Main.w - margin*2) / ( alienConfigs.length - 1) );
+        margin = (Main.w - (alienConfigs.length - 1)*stride) / 2;
+        var alien:Alien;
+        var alienConfig:AlienConfig;
+        aliens = [];
+        while ( alienConfigs.length > 0 ) {
+            alienConfig = alienConfigs.splice(Math.floor( alienConfigs.length * Math.random() ),1)[0];
+            alien = new Alien();
+            alien.setConfig( alienConfig );
+            alien.x = margin + aliens.length * stride + (Math.random()*2-1)*config.xscatter*30;
+            alien.y = (Math.random()*2-1)*config.yscatter*20;
+            aliens.push( alien );
             alienLayer.addChild( alien );
-            alien.x = margin + i * stride;
         }
     }
 
