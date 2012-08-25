@@ -68,6 +68,7 @@ class Alien extends Sprite
 		super();
 
         addChild( skin = new Sprite() );
+        mouseChildren = false;
 
         legs = new AnimatedSprite( "assets/legs.png", 64, 128 );
         skin.addChild( legs );

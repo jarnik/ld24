@@ -42,10 +42,13 @@ typedef GroupConfig = {
 class PlayState extends State 
 {
     private var markers:Array<Bitmap>;
+    private var thumbs:Array<Sprite>;
     private var currentMarker:Int;
     private var aliens:Array<Alien>;
     private var alienLayer:Sprite;
     private var config:GroupConfig;
+    private var photo:Photo;
+    private var photos:Array<AlienConfig>;
 
 	public function new () 
 	{
@@ -71,7 +74,20 @@ class PlayState extends State
             alienLayer.addChild( alien );
             alien.visible = false;
             aliens.push( alien );
+            alien.addEventListener( MouseEvent.CLICK, alienClickHandler );
         }
+        var thumb:Sprite;
+        thumbs = [];
+        for ( i in 0...10 ) {
+            addChild( thumb = new Sprite() );
+            thumb.addChild( new Bitmap(Assets.getBitmapData( "assets/photoThumb.png" ), nme.display.PixelSnapping.AUTO, false ) );
+            thumb.addEventListener( MouseEvent.CLICK, thumbClickHandler );
+            thumbs.push( thumb );
+            thumb.visible = false;
+        }
+        addChild( photo = new Photo() );
+        photo.hide();
+        photo.addEventListener( MouseEvent.CLICK, photoClickHandler );
 
         /*
         cases = [
@@ -187,7 +203,7 @@ class PlayState extends State
     override private function reset():Void {
         createScene( {
             count: 5,
-            select: 1,
+            select: 2,
             size: 0.5,
             xscatter: 0,
             yscatter: 0,
@@ -199,7 +215,7 @@ class PlayState extends State
         this.config = config;
         Main.log( "createScene " );
         
-        var photos:Array<AlienConfig> = [];
+        photos = [];
         var alienConfigs:Array<AlienConfig> = [];
         var father:AlienConfig = Alien.getRandomConfig();
         var mother:AlienConfig = Alien.getRandomConfig();
@@ -219,18 +235,33 @@ class PlayState extends State
         margin = (Main.w - (alienConfigs.length - 1)*stride) / 2;
         var alien:Alien;
         var alienConfig:AlienConfig;
-        var index:Int = 0;
-        while ( alienConfigs.length > 0 ) {
-            alien = aliens[ index ];
+        for ( i in 0...aliens.length ) {
+            alien = aliens[ i ];
+            if ( i >= config.count ) {
+                alien.visible = false;
+                continue;
+            }
+
             alienConfig = alienConfigs.splice(Math.floor( alienConfigs.length * Math.random() ),1)[0];
             alien.setConfig( alienConfig );
-            alien.x = margin + index * stride + (Math.random()*2-1)*config.xscatter*30;
+            alien.x = margin + i * stride + (Math.random()*2-1)*config.xscatter*30;
             alien.y = (Math.random()*2-1)*config.yscatter*20;
             alien.setScale( config.size );
             alien.visible = true;
-            index++;
         }
         setMarker( aliens[0] );
+
+        var thumb:Sprite;
+        for ( i in 0...thumbs.length ) {
+            thumb = thumbs[ i ];
+            if ( i >= photos.length ) {
+                thumb.visible = false;
+                continue;
+            }
+            thumb.x = Main.w/2 - (photos.length-1)*60/2 + i*60 - thumb.width/2;
+            thumb.y = 5;
+            thumb.visible = true;
+        }
     }
 
     private function setMarker( a:Alien ):Void {
@@ -296,7 +327,24 @@ class PlayState extends State
         }
     }
 
-    private function onMouseHandler( e:MouseEvent ):Void {
+    private function photoClickHandler( e:MouseEvent ):Void {
+        if ( photo.visible ) {
+            photo.hide();
+        }
     }
 
+    private function alienClickHandler( e:MouseEvent ):Void {
+        if ( !e.target.visible )
+            return;
+        Main.log( "alien clicked "+e.target );
+        setMarker( e.target );
+    }
+
+    private function thumbClickHandler( e:MouseEvent ):Void {        
+        if ( !e.target.visible )
+            return;
+        Main.log( "thumb clicked "+e.target );
+        photo.show( null, "aa" );
+        //setMarker( e.target );
+    }
 }
