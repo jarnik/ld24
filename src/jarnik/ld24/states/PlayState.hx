@@ -41,9 +41,11 @@ typedef GroupConfig = {
 
 class PlayState extends State 
 {
-    private var marker:Bitmap;
+    private var markers:Array<Bitmap>;
+    private var currentMarker:Int;
     private var aliens:Array<Alien>;
     private var alienLayer:Sprite;
+    private var config:GroupConfig;
 
 	public function new () 
 	{
@@ -55,7 +57,21 @@ class PlayState extends State
         addChild( alienLayer = new Sprite() );
         alienLayer.y = 230;
 
-        addChild( marker = new Bitmap(Assets.getBitmapData( "assets/marker.png" ), nme.display.PixelSnapping.AUTO, false ) );
+        var marker:Bitmap;
+        markers = [];
+        for ( i in 0...10 ) {
+            addChild( marker = new Bitmap(Assets.getBitmapData( "assets/marker.png" ), nme.display.PixelSnapping.AUTO, false ) );
+            markers.push( marker );
+            marker.visible = false;
+        }
+        var alien:Alien;
+        aliens = [];
+        for ( i in 0...10 ) {
+            alien = new Alien();
+            alienLayer.addChild( alien );
+            alien.visible = false;
+            aliens.push( alien );
+        }
 
         /*
         cases = [
@@ -173,16 +189,15 @@ class PlayState extends State
             count: 5,
             select: 1,
             size: 0.5,
-            xscatter: 1,
-            yscatter: 1,
+            xscatter: 0,
+            yscatter: 0,
             match: FIND_FATHER
         } );
     }
 
     private function createScene( config:GroupConfig ):Void {
+        this.config = config;
         Main.log( "createScene " );
-        while ( alienLayer.numChildren > 0 )
-            alienLayer.removeChildAt( 0 );
         
         var photos:Array<AlienConfig> = [];
         var alienConfigs:Array<AlienConfig> = [];
@@ -204,17 +219,26 @@ class PlayState extends State
         margin = (Main.w - (alienConfigs.length - 1)*stride) / 2;
         var alien:Alien;
         var alienConfig:AlienConfig;
-        aliens = [];
+        var index:Int = 0;
         while ( alienConfigs.length > 0 ) {
+            alien = aliens[ index ];
             alienConfig = alienConfigs.splice(Math.floor( alienConfigs.length * Math.random() ),1)[0];
-            alien = new Alien();
             alien.setConfig( alienConfig );
-            alien.x = margin + aliens.length * stride + (Math.random()*2-1)*config.xscatter*30;
+            alien.x = margin + index * stride + (Math.random()*2-1)*config.xscatter*30;
             alien.y = (Math.random()*2-1)*config.yscatter*20;
             alien.setScale( config.size );
-            aliens.push( alien );
-            alienLayer.addChild( alien );
+            alien.visible = true;
+            index++;
         }
+        setMarker( aliens[0] );
+    }
+
+    private function setMarker( a:Alien ):Void {
+        var marker:Bitmap = markers[ currentMarker ];
+        marker.visible = true;
+        marker.x = a.x - marker.width/2;
+        marker.y = alienLayer.y + a.y - a.scale*128 - marker.height;
+        currentMarker = (currentMarker + 1) % config.select;
     }
 
     override public function update( timeElapsed:Float ):Void {

@@ -49,6 +49,7 @@ class Alien extends Sprite
     private var skin:Sprite;
 
     public var config:AlienConfig;
+    public var scale:Float;
 
     public static inline var BODY_COLORS:Array<Array<Float>> = [
         [ 1, 0, 0 ],
@@ -116,6 +117,7 @@ class Alien extends Sprite
         skin.scaleY = scale;
         skin.x = -32*scale;
         skin.y = -128*scale;
+        this.scale = scale;
     }
 
     public static function getRandomConfig():AlienConfig {
