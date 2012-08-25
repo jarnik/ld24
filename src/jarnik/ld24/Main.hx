@@ -20,10 +20,12 @@ import nme.events.KeyboardEvent;
 import nme.media.Sound;
 
 import jarnik.ld24.states.TitleState;
+import jarnik.ld24.states.PlayState;
 import jarnik.ld24.states.State;
 
 class Main extends Sprite 
 {
+    private static var inited:Bool;
     public static var w:Int;
     public static var h:Int;
     private static var state:State;
@@ -67,6 +69,8 @@ class Main extends Sprite
         switch ( s ) {
             case STATE_TITLE:
                 state = new TitleState();
+            case STATE_PLAY:
+                state = new PlayState();
             default:
         }
         states.set( Std.string(s), state );
@@ -118,6 +122,10 @@ class Main extends Sprite
     }
 
 	private static function update( e:Event ) {
+        if ( !inited ) {
+            init();
+        }
+
         var now:Float = Lib.getTimer() / 1000;
         timeElapsed = (now - prevFrameTime);
         prevFrameTime = now;
@@ -129,6 +137,13 @@ class Main extends Sprite
 
 	// Entry point
 	public static function main() {
+        inited = false;
+        initLog();
+    }
+
+    private static function init():Void {
+        inited = true;
+
         // image is 120x80
         // optimus is 480x320
         // flash 720x480
@@ -136,11 +151,10 @@ class Main extends Sprite
         h = 320;       
         upscale = Lib.current.stage.stageWidth / w;
 
-        initLog();
-
         //GameLog.init( "passengers-02", "http://www.jarnik.com/amfphp/gateway.php" );
         //GameLog.start();
-        switchState( STATE_TITLE );
+        //switchState( STATE_TITLE );
+        switchState( STATE_PLAY );
 	}
 
     public static function getPrevState():State {

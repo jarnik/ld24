@@ -19,13 +19,8 @@ import nme.events.KeyboardEvent;
 import nme.media.Sound;
 
 enum States {
-    STATE_INTRO;
     STATE_TITLE;
     STATE_PLAY;
-    STATE_STORY;
-    STATE_LINE_SELECT;
-    STATE_LINE_INTRO;
-    STATE_LINE_OUTRO;
 }
 
 class State extends Sprite 
