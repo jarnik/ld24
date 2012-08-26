@@ -30,6 +30,10 @@ import jarnik.ld24.Dialogue;
 
 enum MATCH_TYPE {
     FIND_FATHER;
+    FIND_KID;
+    FIND_PARENT_TRIO;
+    FIND_BROTHER;
+    FIND_PARENTS;
 }
 
 typedef CaseConfig = {    
@@ -74,8 +78,8 @@ class PlayState extends State
            { l:"When suddenly, one of those damned squishy blobs came punching at my door." }, 
            { l:"Detective, I need your help.", img:"anon" }, 
            { l:"All right, come in and sit over there." }, 
-           { l:"Thank you. #s The thing is, #s my wife has been #p cheating #p on me.", img:"anon" }, 
-           { l:"I'd have forgiven her, it was a long time ago...#s But we have a kid. Twelve years old.", img:"anon" }, 
+           { l:"Thank you. I'm a bit nervous... #s The thing is, #s my wife has been #p cheating #p on me.", img:"anon" }, 
+           { l:"I'd have forgiven her, it was a long time ago... #s But we have a kid. Twelve years old.", img:"anon" }, 
            { l:"I came to know about my wife's affair just recently and I've been suspecting if #p I'm the real father of our child.", img:"anon" }, 
            { l:"It's too late to #p punish my wife, so I need you to find that bastard and #p I'll give him a lesson.", img:"anon" }, 
            { l:"I'll see what I can do. I'll need some leads. Do you have a picture of your wife and kid? " }, 
@@ -117,7 +121,7 @@ class PlayState extends State
             size: 0.5,
             xscatter: 1,
             yscatter: 1,
-            match: "FIND_KID"
+            match: FIND_KID
         },
         outro: []
     },{ // triple parents - find 3 parents
@@ -129,7 +133,7 @@ class PlayState extends State
             size: 1,
             xscatter: 0.2,
             yscatter: 0,
-            match: "FIND_PARENT_TRIO"
+            match: FIND_PARENT_TRIO
         },
         outro: []
     },{ // brother
@@ -141,7 +145,7 @@ class PlayState extends State
             size: 1,
             xscatter: 0.1,
             yscatter: 0,
-            match: "FIND_BROTHER"
+            match: FIND_BROTHER
         },
         outro: []
     },{ // bus crash, find parents
@@ -153,7 +157,7 @@ class PlayState extends State
             size: 1,
             xscatter: 0.2,
             yscatter: 0,
-            match: "FIND_PARENTS"
+            match: FIND_PARENTS
         },
         outro: []
     }
@@ -187,8 +191,8 @@ class PlayState extends State
         cursor = new AnimatedSprite("assets/hands.png",55,55);
         cursor.mouseEnabled = false;
         cursorOffset = new Point();
-        //currentCase = 0;
-        currentCase = 1;
+        currentCase = 0;
+        //currentCase = 1;
         toolbar = new Toolbar();
         stage.addEventListener( MouseEvent.MOUSE_MOVE, onMouseMoveHandler );        
     }
@@ -330,6 +334,7 @@ class PlayState extends State
                 photos.push( { alien:mother, name:"Mother", scale:1 } );
                 photos.push( { alien:child, name:"Child", scale:0.5 } );
                 alienConfigs.push( father );
+            default:
         }
         while ( alienConfigs.length < config.count ) {
             alienConfigs.push( Alien.getRandomConfig() );
@@ -449,6 +454,7 @@ class PlayState extends State
             case FIND_FATHER:
                Main.log("equaling "+photos[1].alien+" and "+Alien.breed( selected[ 0 ].config, photos[0].alien ));
                done = Alien.equal( photos[1].alien, Alien.breed( selected[ 0 ].config, photos[0].alien ) ); 
+            default:
         }
         Main.log("done? "+done);
         if ( done ) {
