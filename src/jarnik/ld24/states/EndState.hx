@@ -52,9 +52,13 @@ class EndState extends State
         addChild( PlayState.cursor );
         addChild( toolbar );
         toolbar.setActiveTool( TOOL_POINT );
-        Main.log("end game");
         dialogue.play([
-            { l:"This is the endGaME!" }
+            { l:"<The sparks flying from the corpse of a burning schoolbus, it looked like a swarm of restless fireflies...>" },
+            { l:"Lucky the firemen were nearby... all the kids are safe.", img:"mendel" },
+            { l:"Yeah... You know what? Let's go for a drink." },
+            { l:"Ok, you're paying? #p So great of you.", img:"mendel" },
+            { l:"Whatever..." },
+            { l:"<THE END>" }
         ]);
     }
 
