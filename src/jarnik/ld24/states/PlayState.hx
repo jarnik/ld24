@@ -73,9 +73,9 @@ class PlayState extends State
     public static inline var cases:Array<CaseConfig> = [
     { // cheating wife, find father
        intro: [ 
-           { l:"I had a bad feeling about that evening..." },
-           { l:"A night sky was black as a yesterday's coffee and gathering clouds were promising another heavy storm." }, 
-           { l:"When suddenly, one of those damned squishy blobs came punching at my door." }, 
+           { l:"<I had a bad feeling about that evening...>" },
+           { l:"<A night sky was black as a yesterday's coffee and gathering clouds were promising another heavy storm.>" }, 
+           { l:"<When suddenly, one of those damned squishy blobs came punching at my door.>" }, 
            { l:"Detective, I need your help.", img:"anon" }, 
            { l:"All right, come in and sit over there." }, 
            { l:"Thank you. I'm a bit nervous... #s The thing is, #s my wife has been #p cheating #p on me.", img:"anon" }, 
@@ -108,22 +108,33 @@ class PlayState extends State
        ]                
     },{ // lost kid, find among orphans
         intro: [
-            { l:"" },
-            { l:"" },
-            { l:"" },
-            { l:"" },
-            { l:"" },
+            { l:"<Sun came peeking through a window blinds like a cheeky girl and woke me up...>" },
+            { l:"<I had a rough night chasing bad guys, didn't even remember how I got back to my place.>" },
+            { l:"<A careful knocking on my door interrupted my hazy thoughts.>" },
+            { l:"Come on in." },
+            { l:"Good morning, detective Darwin. Me and my wife have come with a certain request.", img:"anon" },
+            { l:"We had a most adorable little blob, but five years ago, #s he fell into a river. We thougt he'd #s drowned.", img:"anon" },
+            { l:"But just a week ago, we got a message that he's at the local orphanage.", img:"anon" },
+            { l:"He was too small to remember us and we've known him as a little blob, so we're #p worried we will not recognize him among other blobs.", img:"anon" },
+            { l:"Would you please come with us and help us choose?", img:"anon" },
+            { l:"OK, I'll just fetch my assistant Mendel." },
         ],
-        brief: [],
+        brief: [
+            { l:"Ahh, the smell of orphanage... Reminds me of you, Mendel." },
+            { l:"Same to you, boss.", img:"mendel" }
+        ],
         group: {
             count: 8,
             select: 1,
             size: 0.5,
             xscatter: 1,
             yscatter: 1,
-            match: FIND_KID
+            match: FIND_PARENTS
         },
-        outro: []
+        outro: [
+            { l:"This is your little blobber. I'm absolutely certain of it.." },
+            { l:"Oh, thank you detective! You've brought #p happiness back to our lives!", img:"anon" }
+        ]
     },{ // triple parents - find 3 parents
         intro: [],
         brief: [],
@@ -191,8 +202,8 @@ class PlayState extends State
         cursor = new AnimatedSprite("assets/hands.png",55,55);
         cursor.mouseEnabled = false;
         cursorOffset = new Point();
-        currentCase = 0;
-        //currentCase = 1;
+        //currentCase = 0;
+        currentCase = 2;
         toolbar = new Toolbar();
         stage.addEventListener( MouseEvent.MOUSE_MOVE, onMouseMoveHandler );        
     }
@@ -308,15 +319,6 @@ class PlayState extends State
         toolbar.setActiveTool( TOOL_POINT );
         finished = false;
 
-        /*
-        createScene( {
-            count: 5,
-            select: 1,
-            size: 0.5,
-            xscatter: 0,
-            yscatter: 0,
-            match: FIND_FATHER
-        } );*/
         createScene( cases[ currentCase ].group );
         dialogue.play( cases[ currentCase ].brief );
     }
@@ -334,6 +336,10 @@ class PlayState extends State
                 photos.push( { alien:mother, name:"Mother", scale:1 } );
                 photos.push( { alien:child, name:"Child", scale:0.5 } );
                 alienConfigs.push( father );
+            case FIND_PARENTS:
+                photos.push( { alien:father, name:"Father", scale:1 } );
+                photos.push( { alien:mother, name:"Mother", scale:0.9 } );
+                alienConfigs.push( child );
             default:
         }
         while ( alienConfigs.length < config.count ) {
@@ -454,6 +460,9 @@ class PlayState extends State
             case FIND_FATHER:
                Main.log("equaling "+photos[1].alien+" and "+Alien.breed( selected[ 0 ].config, photos[0].alien ));
                done = Alien.equal( photos[1].alien, Alien.breed( selected[ 0 ].config, photos[0].alien ) ); 
+            case FIND_PARENTS:
+               //   Main.log("equaling "+photos[1].alien+" and "+Alien.breed( selected[ 0 ].config, photos[0].alien ));
+               done = Alien.equal( selected[0].config, Alien.breed( photos[ 0 ].alien, photos[1].alien ) ); 
             default:
         }
         Main.log("done? "+done);
