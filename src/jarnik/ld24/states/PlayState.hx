@@ -25,6 +25,7 @@ import nme.media.SoundChannel;
 
 import jarnik.ld24.Main;
 import jarnik.ld24.Alien;
+import jarnik.ld24.Toolbar;
 
 enum MATCH_TYPE {
     FIND_FATHER;
@@ -57,6 +58,10 @@ class PlayState extends State
     private var config:GroupConfig;
     private var photo:Photo;
     private var photos:Array<PhotoConfig>;
+    private var toolbar:Toolbar;
+
+    public static var cursor:AnimatedSprite;
+    public static var cursorOffset:Point;
 
 	public function new () 
 	{
@@ -101,9 +106,16 @@ class PlayState extends State
         okbutton.addEventListener( MouseEvent.CLICK, okClickHandler );
         okbutton.visible = false;
 
+        addChild( toolbar = new Toolbar() );
+
         addChild( photo = new Photo() );
         photo.hide();
         photo.addEventListener( MouseEvent.CLICK, photoClickHandler );
+
+        addChild( cursor = new AnimatedSprite("assets/hands.png",55,55) );
+        cursor.mouseEnabled = false;
+        cursorOffset = new Point();
+        toolbar.setActiveTool( TOOL_POINT );
 
         /*
         cases = [
@@ -191,6 +203,7 @@ class PlayState extends State
         */
         
         stage.addEventListener( KeyboardEvent.KEY_UP, keyHandler );
+        stage.addEventListener( MouseEvent.MOUSE_MOVE, onMouseMoveHandler );        
 
         /*
         rooms = [
@@ -354,6 +367,11 @@ class PlayState extends State
         Main.log("done? "+done);
     }
 
+    private function onMouseMoveHandler( e:MouseEvent ):Void {
+        cursor.x = e.stageX / Main.upscale - cursorOffset.x;
+        cursor.y = e.stageY / Main.upscale - cursorOffset.y;
+    }
+
     private function okClickHandler( e:MouseEvent ):Void {
         if ( !okbutton.visible )
             return;
@@ -368,7 +386,7 @@ class PlayState extends State
     }
 
     private function alienClickHandler( e:MouseEvent ):Void {
-        if ( !e.target.visible )
+        if ( !e.target.visible || toolbar.activeTool != TOOL_POINT )
             return;
         Main.log( "alien clicked "+e.target );
         selected[ currentMarker ] = e.target;
