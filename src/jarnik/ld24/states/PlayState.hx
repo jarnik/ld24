@@ -129,24 +129,41 @@ class PlayState extends State
             size: 0.5,
             xscatter: 1,
             yscatter: 1,
-            match: FIND_PARENTS
+            match: FIND_KID
         },
         outro: [
             { l:"This is your little blobber. I'm absolutely certain of it.." },
             { l:"Oh, thank you detective! You've brought #p happiness back to our lives!", img:"anon" }
         ]
-    },{ // triple parents - find 3 parents
-        intro: [],
-        brief: [],
+    },{ // find mother
+        intro: [
+            { l:"<I was sitting on a park bench, crunching peanuts. I nervous young blob squiggled towards me.>" },
+            { l:"Hello, detective. I've heard you're an expert on family matters.", img:"anon" },
+            { l:"It depends. What can I do for you?" },
+            { l:"You see, I am an #s orphan. Or had been. Because a while ago, I came to know that my parents may still be alive somewhere.", img:"anon" },
+            { l:"The good thing is, they are both actually still alive. At the local retirement house.", img:"anon" },
+            { l:"The bad thing is, #s they are probably too old to remember me and the retirement house database is a mess.", img:"anon" },
+            { l:"I fear #p I might not recognize them among other elderly blobs there.", img:"anon" },
+            { l:"Let's walk there. It's just across the park from here." }
+        ],
+        brief: [
+            { l:"Retirement house... I wonder if I'm gonna live long enough to get here myself." },
+            { l:"I don't think solving family relations is gonna get you killed any soon...", img:"mendel" },
+            { l:"So... yeah, your chances are #p quite high.", img:"mendel" }
+        ],
         group: {
-            count: 5,
-            select: 3,
-            size: 1,
+            count: 9,
+            select: 2,
+            size: 0.6,
             xscatter: 0.2,
-            yscatter: 0,
-            match: FIND_PARENT_TRIO
+            yscatter: 0.2,
+            match: FIND_PARENTS
         },
-        outro: []
+        outro: [
+            { l:"These are your loving blobs." },
+            { l:"Thanks, detective! I'll fetch the lawyer right away.", img: "anon" },
+            { l:"Seems he was rather after their last will, rather than their #s love...", img:"mendel" }
+        ]
     },{ // brother
         intro: [],
         brief: [],
@@ -203,7 +220,7 @@ class PlayState extends State
         cursor.mouseEnabled = false;
         cursorOffset = new Point();
         //currentCase = 0;
-        currentCase = 2;
+        currentCase = 3;
         toolbar = new Toolbar();
         stage.addEventListener( MouseEvent.MOUSE_MOVE, onMouseMoveHandler );        
     }
@@ -336,10 +353,14 @@ class PlayState extends State
                 photos.push( { alien:mother, name:"Mother", scale:1 } );
                 photos.push( { alien:child, name:"Child", scale:0.5 } );
                 alienConfigs.push( father );
-            case FIND_PARENTS:
+            case FIND_KID:
                 photos.push( { alien:father, name:"Father", scale:1 } );
                 photos.push( { alien:mother, name:"Mother", scale:0.9 } );
                 alienConfigs.push( child );
+            case FIND_PARENTS:
+                photos.push( { alien:child, name:"Son", scale:1 } );
+                alienConfigs.push( father );
+                alienConfigs.push( mother );
             default:
         }
         while ( alienConfigs.length < config.count ) {
@@ -458,11 +479,16 @@ class PlayState extends State
         var done:Bool = false;
         switch ( config.match ) {
             case FIND_FATHER:
-               Main.log("equaling "+photos[1].alien+" and "+Alien.breed( selected[ 0 ].config, photos[0].alien ));
-               done = Alien.equal( photos[1].alien, Alien.breed( selected[ 0 ].config, photos[0].alien ) ); 
+                Main.log("equaling "+photos[1].alien+" and "+Alien.breed( selected[ 0 ].config, photos[0].alien ));
+                done = Alien.equal( photos[1].alien, Alien.breed( selected[ 0 ].config, photos[0].alien ) ); 
+            case FIND_KID:
+                done = Alien.equal( selected[0].config, Alien.breed( photos[ 0 ].alien, photos[1].alien ) ); 
             case FIND_PARENTS:
-               //   Main.log("equaling "+photos[1].alien+" and "+Alien.breed( selected[ 0 ].config, photos[0].alien ));
-               done = Alien.equal( selected[0].config, Alien.breed( photos[ 0 ].alien, photos[1].alien ) ); 
+                Main.log("equaling kid "+photos[0].alien+" and parents "+ 
+                    Alien.breed( selected[ 0 ].config, selected[ 1 ].config ) + " or "+ 
+                    Alien.breed( selected[ 1 ].config, selected[ 0 ].config )  );
+                done = Alien.equal( photos[0].alien, Alien.breed( selected[ 0 ].config, selected[ 1 ].config ) ) ||
+                    Alien.equal( photos[0].alien, Alien.breed( selected[ 1 ].config, selected[ 0 ].config ) ); 
             default:
         }
         Main.log("done? "+done);
