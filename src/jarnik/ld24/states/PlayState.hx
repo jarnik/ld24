@@ -71,8 +71,12 @@ class PlayState extends State
 
     override private function create():Void {
 
+        addChild( new Bitmap(Assets.getBitmapData( "assets/scene.png" ), nme.display.PixelSnapping.AUTO, false ) );
+
         addChild( alienLayer = new Sprite() );
         alienLayer.y = 210;
+
+        addChild( new Bitmap(Assets.getBitmapData( "assets/vignette.png" ), nme.display.PixelSnapping.AUTO, false ) );
 
         var marker:Bitmap;
         markers = [];
@@ -106,6 +110,15 @@ class PlayState extends State
         okbutton.y = 220;
         okbutton.addEventListener( MouseEvent.CLICK, okClickHandler );
         okbutton.visible = false;
+
+        // mendel
+        var mendel:Sprite;
+        addChild( mendel = new Sprite());
+        mendel.addChild( new Bitmap(Assets.getBitmapData( "assets/mendel.png" ), nme.display.PixelSnapping.AUTO, false ) );
+        mendel.scaleX = 2;
+        mendel.scaleY = 2;
+        mendel.y = Main.h - mendel.height;
+        mendel.x = Main.w - mendel.width;
 
         addChild( dialogue = new Dialogue() );
 

@@ -35,6 +35,7 @@ typedef Script = Array<Dynamic>;
 class Dialogue extends Sprite
 {
     public var speech:Bitmap;
+    public var fade:Bitmap;
     public var tf:TextField;
     public var darwin:Bitmap;
     private var script:Script;
@@ -56,7 +57,6 @@ class Dialogue extends Sprite
         var bgrLayer:Sprite; 
         addChild( bgrLayer = new Sprite() );
 
-        var fade:Bitmap;
         bgrLayer.addChild( fade = new Bitmap(Assets.getBitmapData( "assets/fade.png" ), nme.display.PixelSnapping.AUTO, false ) );
         fade.alpha = 0.8;
       
@@ -102,10 +102,11 @@ class Dialogue extends Sprite
 
         hide();
 
+        /*
         play([
             { l:"I've had a bad feeling about this evening..." }, 
             { l:"When suddenly, #s one of those damned squishy #p blobs came punching at my door.", img:"darwin" }
-        ]);
+        ]);*/
 	}
 
     private function updateMood():Void {
@@ -150,11 +151,15 @@ class Dialogue extends Sprite
     public function hide():Void {
         tf.visible = false;
         speech.visible = false;
+        fade.visible = false;
+        speakerLayer.visible = false;
     }
 
     public function show():Void {
         tf.visible = true;
         speech.visible = true;
+        fade.visible = true;
+        speakerLayer.visible = true;
     }
 
     public function shown():Bool { return tf.visible; }
@@ -162,6 +167,11 @@ class Dialogue extends Sprite
     public function nextLine() {
         Main.log("next line");
         currentLine++;
+        if ( currentLine == script.length ) {
+            hide();
+            return;
+        }
+
         currentChar = 0;
         charTimer = 0;
         lineText = "";
