@@ -165,17 +165,32 @@ class PlayState extends State
             { l:"Seems he was rather after their last will, rather than their #s love...", img:"mendel" }
         ]
     },{ // brother
-        intro: [],
-        brief: [],
+        intro: [
+            { l:"<Lazy evening crept into our office. I've been sucking on a lollipop, while Mendel went through a mail.>" },
+            { l:"Detective, there's a postcard from my brother!", img:"mendel" },
+            { l:"Well, good for you. Been on a vacation?" },
+            { l:"I don't #p have any brother! At least, haven't had until now.", img:"mendel" },
+            { l:"He states there, that his father was our milkman during the war.", img:"mendel" },
+            { l:"My father was fighting abroad for several years and my mother #s had apparently too much time on her hands. It was before I was born.", img:"mendel" },
+            { l:"He says there, he's coming to town to meet me. \"Be at the railway station at 6pm.\"", img:"mendel" },
+            { l:"That's in 30 minutes. But... come with me, I've got an idea.", img:"mendel" },
+            { l:"Ok, we can grab a drink downtown." }
+        ],
+        brief: [
+            { l:"Let's see if you can find me brother on your own.", img:"mendel" },
+            { l:"Hah... just look at your face. #p Ok, I'll give you pictures of both my mother and his father.", img:"mendel" }
+        ],
         group: {
-            count: 5,
+            count: 10,
             select: 1,
-            size: 1,
+            size: 0.8,
             xscatter: 0.1,
-            yscatter: 0,
-            match: FIND_BROTHER
+            yscatter: 0.3,
+            match: FIND_KID
         },
-        outro: []
+        outro: [
+            { l:"Yeah, I think that's him. Let's greet him and get a drink together.", img:"mendel" }
+        ]
     },{ // bus crash, find parents
         intro: [],
         brief: [],
