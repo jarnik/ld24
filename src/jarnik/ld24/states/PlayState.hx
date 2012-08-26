@@ -58,7 +58,8 @@ class PlayState extends State
     private var config:GroupConfig;
     private var photo:Photo;
     private var photos:Array<PhotoConfig>;
-    private var toolbar:Toolbar;
+    public static var toolbar:Toolbar;
+    private var dialogue:Dialogue;
 
     public static var cursor:AnimatedSprite;
     public static var cursorOffset:Point;
@@ -106,6 +107,8 @@ class PlayState extends State
         okbutton.addEventListener( MouseEvent.CLICK, okClickHandler );
         okbutton.visible = false;
 
+        addChild( dialogue = new Dialogue() );
+
         addChild( toolbar = new Toolbar() );
 
         addChild( photo = new Photo() );
@@ -116,6 +119,7 @@ class PlayState extends State
         cursor.mouseEnabled = false;
         cursorOffset = new Point();
         toolbar.setActiveTool( TOOL_POINT );
+
 
         /*
         cases = [
@@ -303,7 +307,8 @@ class PlayState extends State
     }
 
     override public function update( timeElapsed:Float ):Void {
-       
+        if ( dialogue.shown() )
+            dialogue.update( timeElapsed );
     }
 
     private function keyHandler( e:KeyboardEvent ):Void {
