@@ -27,13 +27,13 @@
     <assets path="Assets/gfx" rename="assets/gfx" include="*" exclude="nme.svg" />
 
     <assets path="sfx" type="sound" include="*" />
-    <assets path="Assets/music" rename="assets/music" type="music" include="*" />
-    <assets path="Assets/sfx" rename="assets/sfx" type="sound" include="*" />
     <assets path="Assets/json" rename="assets/json" include="*" />
 
     -->
     <assets path="Assets" rename="assets" include="*.png" exclude="nme.svg" />
     <assets path="Assets/fonts" rename="assets/fonts" type="font" include="*" />
+    <assets path="Assets/music" rename="assets/music" type="music" include="*" />
+    <assets path="Assets/sfx" rename="assets/sfx" type="sound" include="*" />
 	
     <!--
 	<icon name="Assets/icon.png" width="16" height="16" />

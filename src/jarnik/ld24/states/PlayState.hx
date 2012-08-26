@@ -536,10 +536,13 @@ class PlayState extends State
         if ( done ) {
             dialogue.play( cases[ currentCase ].outro );
             finished = true;
-        } else
+            SoundLib.play("assets/sfx/win.mp3");
+        } else {
             dialogue.play([
                 { l:"I think, you got it wrong, boss...", img:"mendel" }
             ]);
+            SoundLib.play("assets/sfx/fail.mp3");
+        }
     }
 
     private static function onMouseMoveHandler( e:MouseEvent ):Void {
@@ -561,6 +564,7 @@ class PlayState extends State
     }
 
     private function mendelClickHandler( e:MouseEvent ):Void {
+        SoundLib.play("assets/sfx/punch.mp3");
         dialogue.play([
             { l: tips[ Math.floor( Math.random()*tips.length ) ] , img:"mendel" }
         ]);
@@ -569,6 +573,8 @@ class PlayState extends State
     private function alienClickHandler( e:MouseEvent ):Void {
         if ( !e.target.visible || toolbar.activeTool != TOOL_POINT )
             return;
+
+        SoundLib.play("assets/sfx/point.mp3");
         selected[ currentMarker ] = e.target;
         setMarker( e.target );
         okbutton.visible = ( markers[ config.select-1 ].visible ) ;

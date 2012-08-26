@@ -28,10 +28,15 @@ import jarnik.ld24.Main;
 class TitleState extends State 
 {
     private var title:Sprite;
+    private var music:Sound;
+    private var musicChannel:SoundChannel;
 
 	public function new () 
 	{
 		super();
+
+        music = Assets.getSound("assets/music/horses.mp3");
+        musicChannel = music.play( 0, 1000 );
 	}
 
     override private function create():Void {
@@ -84,6 +89,7 @@ class TitleState extends State
 
 
     private function onMouseHandler( e:MouseEvent ):Void {
+        SoundLib.play("assets/sfx/click.mp3");
         Main.switchState( STATE_INTRO );
     }
 

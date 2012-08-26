@@ -195,6 +195,7 @@ class Dialogue extends Sprite
         tf.text = "";
         show();
         mood = 0;
+        updateMood();
         currentLine = -1;
         speakerLayer.visible = false;
         this.script = script;
@@ -203,6 +204,7 @@ class Dialogue extends Sprite
 
     private function stageClickHandler( e:MouseEvent ):Void {
         if ( shown() && moodRequired == 0 ) {
+            SoundLib.play("assets/sfx/click.mp3", 0.5);
             var found:Bool = false;
             if ( currentChar >= script[ currentLine ].l.length-1 ) {
                 nextLine();
@@ -228,9 +230,11 @@ class Dialogue extends Sprite
         switch ( PlayState.toolbar.activeTool ) {
             case TOOL_POINT:
             case TOOL_PUNCH:
+                SoundLib.play("assets/sfx/punch.mp3");
                 mood -= 0.4;
             case TOOL_PET:
                 mood += 0.4;
+                SoundLib.play("assets/sfx/pet.mp3");
         }
         mood = Math.min( 1, Math.max( -1, mood ) );
         updateMood();
