@@ -177,6 +177,7 @@ class Dialogue extends Sprite
         currentChar = 0;
         charTimer = 0;
         lineText = "";
+        tf.text = lineText;
         moodRequired = 0;
 
         var left:Bool = (script[ currentLine ].img == null );
@@ -203,6 +204,10 @@ class Dialogue extends Sprite
     private function stageClickHandler( e:MouseEvent ):Void {
         if ( shown() && moodRequired == 0 ) {
             var found:Bool = false;
+            if ( currentChar >= script[ currentLine ].l.length-1 ) {
+                nextLine();
+                return;
+            }
             for ( i in currentChar...script[ currentLine ].l.length ) {
                 if ( script[ currentLine ].l.charAt( i ) == "#" ) {
                     found = true;
@@ -210,10 +215,12 @@ class Dialogue extends Sprite
                     break;
                 } else {
                     lineText += script[ currentLine ].l.charAt( i );
+                    currentChar = i;
                 }
             }
-            if ( !found )
-                nextLine();
+            tf.text = lineText;
+            if ( !found ) 
+                charTimer = -1;
         }
     }
 
@@ -221,9 +228,9 @@ class Dialogue extends Sprite
         switch ( PlayState.toolbar.activeTool ) {
             case TOOL_POINT:
             case TOOL_PUNCH:
-                mood -= 0.2;
+                mood -= 0.4;
             case TOOL_PET:
-                mood += 0.2;
+                mood += 0.4;
         }
         mood = Math.min( 1, Math.max( -1, mood ) );
         updateMood();

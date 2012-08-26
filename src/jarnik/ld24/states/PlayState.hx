@@ -58,21 +58,37 @@ class PlayState extends State
 {
 
     public static inline var tips:Array<String> = [
-        "Horns are always inherited from paternal side.",
-        "Anntenae is always inherited from maternal side.",
-        "Body color is always inherited from paternal side.",
-        "Spot color is always inherited from maternal side.",
-        "Leg count is always inherited as an average of mother's and father's, with rounding up.",
-        "Eye count is always inherited as an average of mother's and father's, with rounding down.",
-        "Robustness is always inherited as an average of mother's and father's, with rounding down."
+        "Horns are always inherited from the paternal side.",
+        "Anntenae is always inherited from the maternal side.",
+        "Body color is always inherited from the paternal side.",
+        "Spot color is always inherited from the maternal side.",
+        "Leg count is always inherited as an average of mother's and father's, rounded up.",
+        "Eye count is always inherited as an average of mother's and father's, rounded down.",
+        "Robustness is always inherited as an average of mother's and father's, rounded down."
     ];
     public static inline var cases:Array<CaseConfig> = [
     { // cheating wife, find father
        intro: [ 
            { l:"I've had a bad feeling about this evening..." }, 
+           { l:"When suddenly, one of those damned squishy blobs came punching at my door." }, 
+           { l:"Detective, I need your help.", img:"anon" }, 
+           { l:"All right, come in and sit over there." }, 
+           { l:"Thank you. #s The thing is, #s my wife has been #p cheating #p on me.", img:"anon" }, 
+           { l:"I'd have forgiven her, it was a long time ago...#s But we have a kid. Twelve years old.", img:"anon" }, 
+           { l:"I came to know about my wife's affair just recently and I've been suspecting if #p I'm the real father of our child.", img:"anon" }, 
+           { l:"It's too late to #p punish my wife, so I need you to find that bastard and #p I'll give him a lesson.", img:"anon" }, 
+           { l:"I'll see what I can do. I'll need some leads. Do you have a picture of your wife and kid? " }, 
+           { l:"Here's a #p photo of my wife.", img:"anon" }, 
+           { l:"And a #s picture of our child.", img:"anon" } 
        ],
        brief: [
-           { l:"Here's a group of thugs I'm suspecting to be genetic father to that kid." }, 
+           { l:"Here's a group of thugs I'm suspecting." }, 
+           { l:"Okay, let's get on with it!", img:"mendel" }, 
+           { l:"Who are you again?" }, 
+           { l:"It's me, Mendel. Your assistant.", img:"mendel" }, 
+           { l:"Ask me anything about the biology.", img:"mendel" }, 
+           { l:"Ok. So which one of these is our man...?" }, 
+           { l:"Don't forget to check out the clue photos - they're at the top of your desk.", img:"mendel" }, 
        ],
        //scene: { bgr: "somepicture.png" },
        group: {
@@ -205,18 +221,7 @@ class PlayState extends State
         cases = [
             { // cheating wife, find father
                 intro: [ 
-                    { l:"I've had a bad feeling about this evening..." }, 
-                    { l:"When suddenly, one of those damned squishy blobs came punching at my door." }, 
-                    { l:"Detective, I need your help." }, 
-                    { l:"All right, come in and sit over there." }, 
-                    { l:"Thank you. #s The thing is, #s my wife has been #p cheating #p on me." }, 
-                    { l:"I'd have forgiven her, it was a long time ago...#s But we have a kid. Twelve years old." }, 
-                    { l:"I came to know about my wife's affair just recently and I've been suspecting if #p I'm the real father of our child." }, 
-                    { l:"It's too late to #p punish my wife, so I need you to find that bastard and #p I'll give him a lesson." }, 
-                    { l:"I'll see what I can do. I'll need some leads. Do you have a picture of your wife and kid? " }, 
-                    { l:"Here's a #p photo of my wife." }, 
-                    { l:"And a #s picture of our child." } 
-                ],
+                        ],
                 brief: [
                     { l:"Here's a group of thugs I'm suspecting to be genetic father to that kid." }, 
                 ],
