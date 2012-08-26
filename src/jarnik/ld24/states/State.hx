@@ -21,6 +21,8 @@ import nme.media.Sound;
 enum States {
     STATE_TITLE;
     STATE_PLAY;
+    STATE_INTRO;
+    STATE_END;
 }
 
 class State extends Sprite 

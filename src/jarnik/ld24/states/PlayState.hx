@@ -26,9 +26,17 @@ import nme.media.SoundChannel;
 import jarnik.ld24.Main;
 import jarnik.ld24.Alien;
 import jarnik.ld24.Toolbar;
+import jarnik.ld24.Dialogue;
 
 enum MATCH_TYPE {
     FIND_FATHER;
+}
+
+typedef CaseConfig = {    
+    var intro:Script;
+    var brief:Script;
+    var group:GroupConfig;
+    var outro:Script;
 }
 
 typedef PhotoConfig = {    
@@ -58,6 +66,48 @@ class PlayState extends State
         "Eye count is always inherited as an average of mother's and father's, with rounding down.",
         "Robustness is always inherited as an average of mother's and father's, with rounding down."
     ];
+    public static inline var cases:Array<CaseConfig> = [
+    { // cheating wife, find father
+       intro: [ 
+           { l:"I've had a bad feeling about this evening..." }, 
+       ],
+       brief: [
+           { l:"Here's a group of thugs I'm suspecting to be genetic father to that kid." }, 
+       ],
+       //scene: { bgr: "somepicture.png" },
+       group: {
+           count: 5,
+           select: 1,
+           size: 1,
+           xscatter: 0,
+           yscatter: 0,
+           match: FIND_FATHER
+       },
+       outro: [
+           { l:"Come with me. There's a certain gentleman who might want to have a word with you." } 
+       ]                
+    }/*,{ // cheating wife, find father
+       intro: [ 
+           { l:"2 I've had a bad feeling about this evening..." }, 
+       ],
+       brief: [
+           { l:"2 Here's a group of thugs I'm suspecting to be genetic father to that kid." }, 
+       ],
+       //scene: { bgr: "somepicture.png" },
+       group: {
+           count: 5,
+           select: 1,
+           size: 1,
+           xscatter: 0,
+           yscatter: 0,
+           match: FIND_FATHER
+       },
+       outro: [
+           { l:"Come with me. There's a certain gentleman who might want to have a word with you." } 
+       ]                
+    }*/
+    ];
+    public static var currentCase:Int;
 
     private var markers:Array<Bitmap>;
     private var thumbs:Array<Sprite>;
@@ -70,7 +120,9 @@ class PlayState extends State
     private var photo:Photo;
     private var photos:Array<PhotoConfig>;
     public static var toolbar:Toolbar;
+    private var toolbarLayer:Sprite;
     private var dialogue:Dialogue;
+    private var finished:Bool;
 
     public static var cursor:AnimatedSprite;
     public static var cursorOffset:Point;
@@ -79,6 +131,15 @@ class PlayState extends State
 	{
 		super();
 	}
+    
+    public static function init( stage:Stage ):Void {
+        cursor = new AnimatedSprite("assets/hands.png",55,55);
+        cursor.mouseEnabled = false;
+        cursorOffset = new Point();
+        currentCase = 0;
+        toolbar = new Toolbar();
+        stage.addEventListener( MouseEvent.MOUSE_MOVE, onMouseMoveHandler );        
+    }
 
     override private function create():Void {
 
@@ -134,17 +195,11 @@ class PlayState extends State
 
         addChild( dialogue = new Dialogue() );
 
-        addChild( toolbar = new Toolbar() );
+        addChild( toolbarLayer = new Sprite() );
 
         addChild( photo = new Photo() );
         photo.hide();
         photo.addEventListener( MouseEvent.CLICK, photoClickHandler );
-
-        addChild( cursor = new AnimatedSprite("assets/hands.png",55,55) );
-        cursor.mouseEnabled = false;
-        cursorOffset = new Point();
-        toolbar.setActiveTool( TOOL_POINT );
-
 
         /*
         cases = [
@@ -166,7 +221,6 @@ class PlayState extends State
                     { l:"Here's a group of thugs I'm suspecting to be genetic father to that kid." }, 
                 ],
                 scene: { bgr: "somepicture.png" },
-                denial: { l: "I think you have a wrong person." },
                 group: {
                     count: 5,
                     select: 1,
@@ -232,7 +286,6 @@ class PlayState extends State
         */
         
         stage.addEventListener( KeyboardEvent.KEY_UP, keyHandler );
-        stage.addEventListener( MouseEvent.MOUSE_MOVE, onMouseMoveHandler );        
 
         /*
         rooms = [
@@ -259,6 +312,12 @@ class PlayState extends State
     
 
     override private function reset():Void {
+        addChild( cursor );
+        toolbarLayer.addChild( toolbar );
+        toolbar.setActiveTool( TOOL_POINT );
+        finished = false;
+
+        /*
         createScene( {
             count: 5,
             select: 1,
@@ -266,12 +325,13 @@ class PlayState extends State
             xscatter: 0,
             yscatter: 0,
             match: FIND_FATHER
-        } );
+        } );*/
+        createScene( cases[ currentCase ].group );
+        dialogue.play( cases[ currentCase ].brief );
     }
 
     private function createScene( config:GroupConfig ):Void {
         this.config = config;
-        Main.log( "createScene " );
         
         photos = [];
         var alienConfigs:Array<AlienConfig> = [];
@@ -321,6 +381,8 @@ class PlayState extends State
         }
         okbutton.visible = false;
         selected = [];
+        for ( m in markers )
+            m.visible = false;
     }
 
     private function setMarker( a:Alien ):Void {
@@ -334,6 +396,13 @@ class PlayState extends State
     override public function update( timeElapsed:Float ):Void {
         if ( dialogue.shown() )
             dialogue.update( timeElapsed );
+        else if ( finished ) {
+            currentCase++;
+            if ( currentCase >= cases.length )
+                Main.switchState( STATE_END );
+            else
+                Main.switchState( STATE_INTRO );
+        }
     }
 
     private function keyHandler( e:KeyboardEvent ):Void {
@@ -395,17 +464,16 @@ class PlayState extends State
                done = Alien.equal( photos[1].alien, Alien.breed( selected[ 0 ].config, photos[0].alien ) ); 
         }
         Main.log("done? "+done);
-        if ( done )
-            dialogue.play([
-                { l:"That's him! Get him, Mendel!" }
-            ])
-        else
+        if ( done ) {
+            dialogue.play( cases[ currentCase ].outro );
+            finished = true;
+        } else
             dialogue.play([
                 { l:"I think, you got it wrong, boss...", img:"mendel" }
             ]);
     }
 
-    private function onMouseMoveHandler( e:MouseEvent ):Void {
+    private static function onMouseMoveHandler( e:MouseEvent ):Void {
         cursor.x = e.stageX / Main.upscale - cursorOffset.x;
         cursor.y = e.stageY / Main.upscale - cursorOffset.y;
     }
@@ -432,7 +500,6 @@ class PlayState extends State
     private function alienClickHandler( e:MouseEvent ):Void {
         if ( !e.target.visible || toolbar.activeTool != TOOL_POINT )
             return;
-        Main.log( "alien clicked "+e.target );
         selected[ currentMarker ] = e.target;
         setMarker( e.target );
         okbutton.visible = ( markers[ config.select-1 ].visible ) ;

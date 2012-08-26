@@ -166,9 +166,9 @@ class Dialogue extends Sprite
 
     public function shown():Bool { return tf.visible; }
 
-    public function nextLine() {
-        Main.log("next line");
+    private function nextLine() {
         currentLine++;
+        Main.log("next line " +currentLine);
         if ( currentLine == script.length ) {
             hide();
             return;

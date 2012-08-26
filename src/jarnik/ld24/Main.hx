@@ -21,6 +21,8 @@ import nme.media.Sound;
 
 import jarnik.ld24.states.TitleState;
 import jarnik.ld24.states.PlayState;
+import jarnik.ld24.states.IntroState;
+import jarnik.ld24.states.EndState;
 import jarnik.ld24.states.State;
 
 class Main extends Sprite 
@@ -71,6 +73,10 @@ class Main extends Sprite
                 state = new TitleState();
             case STATE_PLAY:
                 state = new PlayState();
+            case STATE_INTRO:
+                state = new IntroState();
+            case STATE_END:
+                state = new EndState();
             default:
         }
         states.set( Std.string(s), state );
@@ -153,8 +159,10 @@ class Main extends Sprite
 
         //GameLog.init( "passengers-02", "http://www.jarnik.com/amfphp/gateway.php" );
         //GameLog.start();
+        PlayState.init( stateLayer.stage );
         //switchState( STATE_TITLE );
-        switchState( STATE_PLAY );
+        //switchState( STATE_PLAY );
+        switchState( STATE_INTRO );
 	}
 
     public static function getPrevState():State {
