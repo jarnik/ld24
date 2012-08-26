@@ -27,7 +27,7 @@ import jarnik.ld24.Main;
 
 class TitleState extends State 
 {
-    private var title:Bitmap;
+    private var title:Sprite;
 
 	public function new () 
 	{
@@ -35,6 +35,9 @@ class TitleState extends State
 	}
 
     override private function create():Void {
+
+        addChild( title = new Sprite() );
+        title.addChild( new Bitmap(Assets.getBitmapData( "assets/title.png" ), nme.display.PixelSnapping.AUTO, false ) );
         
         //words.showText( startWords[ Std.int(startWords.length * Math.random()) ], null, false );
         //words.visible = true;
@@ -43,13 +46,11 @@ class TitleState extends State
         */
         //addChild( new Bitmap(Assets.getBitmapData( "assets/screen_title.png" ), nme.display.PixelSnapping.AUTO, false ) );
 
+        title.addEventListener( MouseEvent.CLICK, onMouseHandler );
         /*
-        stage.addEventListener( MouseEvent.CLICK, onMouseHandler );
         stage.addEventListener( MouseEvent.MOUSE_DOWN, onMouseHandler );
         stage.addEventListener( MouseEvent.MOUSE_UP, onMouseHandler );        
         */
-        
-        stage.addEventListener( KeyboardEvent.KEY_UP, keyHandler );
 
         /*
         rooms = [
@@ -79,60 +80,11 @@ class TitleState extends State
     }
 
     override public function update( timeElapsed:Float ):Void {
-       
     }
 
-    private function keyHandler( e:KeyboardEvent ):Void {
-        /*
-        switch ( e.keyCode ) {
-            // SPACE
-            case 32:
-                if ( e.type == KeyboardEvent.KEY_DOWN ) {
-                }
-                if ( e.type == KeyboardEvent.KEY_UP ) {
-                }
-            // I , tab
-            case 73, 9:
-                if ( e.type == KeyboardEvent.KEY_UP ) {
-                }
-            // [
-            case 219:
-                if ( e.type == KeyboardEvent.KEY_UP ) {
-                }
-            // ]
-            case 221:
-                if ( e.type == KeyboardEvent.KEY_UP ) {
-                }
-            // DOWN
-            case 40:
-                if ( e.type == KeyboardEvent.KEY_UP ) {
-                    Main.log("rotate right");
-                    rotate( true );
-                }
-            // UP
-            case 38:
-                if ( e.type == KeyboardEvent.KEY_UP ) {
-                    Main.log("rotate left");
-                    rotate( false );
-                }
-            // LEFT
-            case 37:
-                if ( e.type == KeyboardEvent.KEY_UP ) {
-                    Main.log("look left");
-                    turn( false );
-                }                    
-            // RIGHT
-            case 39:
-                if ( e.type == KeyboardEvent.KEY_UP ) {
-                    Main.log("look right");
-                    turn( true );
-                }
-            default:
-                log("key "+e.keyCode);
-        }*/
-    }
 
     private function onMouseHandler( e:MouseEvent ):Void {
+        Main.switchState( STATE_INTRO );
     }
 
 }

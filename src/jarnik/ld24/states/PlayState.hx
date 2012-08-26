@@ -79,13 +79,13 @@ class PlayState extends State
            { l:"<When suddenly, one of those damned squishy blobs came punching at my door.>" }, 
            { l:"Detective, I need your help.", img:"anon" }, 
            { l:"All right, come in and sit over there." }, 
-           { l:"Thank you. I'm a bit nervous... #s The thing is, #s my wife has been #p cheating #p on me.", img:"anon" }, 
+           { l:"Thank you. I'm a bit nervous... #s The thing is, #s my wife has been #p cheating on me.", img:"anon" }, 
            { l:"I'd have forgiven her, it was a long time ago... #s But we have a kid. Twelve years old.", img:"anon" }, 
            { l:"I came to know about my wife's affair just recently and I've been suspecting if #p I'm the real father of our child.", img:"anon" }, 
            { l:"It's too late to #p punish my wife, so I need you to find that bastard and #p I'll give him a lesson.", img:"anon" }, 
            { l:"I'll see what I can do. I'll need some leads. Do you have a picture of your wife and kid? " }, 
-           { l:"Here's a #p photo of my wife.", img:"anon" }, 
-           { l:"And a #s picture of our child.", img:"anon" } 
+           { l:"Here's a photo of my wife.", img:"anon" }, 
+           { l:"And a picture of our child.", img:"anon" } 
        ],
        brief: [
            { l:"Here's a group of thugs I'm suspecting." }, 
@@ -252,8 +252,8 @@ class PlayState extends State
         cursor = new AnimatedSprite("assets/hands.png",55,55);
         cursor.mouseEnabled = false;
         cursorOffset = new Point();
-        //currentCase = 0;
-        currentCase = 4;
+        currentCase = 0;
+        //currentCase = 4;
         toolbar = new Toolbar();
         stage.addEventListener( MouseEvent.MOUSE_MOVE, onMouseMoveHandler );        
     }

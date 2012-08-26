@@ -160,9 +160,9 @@ class Main extends Sprite
         //GameLog.init( "passengers-02", "http://www.jarnik.com/amfphp/gateway.php" );
         //GameLog.start();
         PlayState.init( stateLayer.stage );
-        //switchState( STATE_TITLE );
+        switchState( STATE_TITLE );
         //switchState( STATE_PLAY );
-        switchState( STATE_INTRO );
+        //switchState( STATE_INTRO );
 	}
 
     public static function getPrevState():State {
