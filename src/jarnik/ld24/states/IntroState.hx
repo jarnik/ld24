@@ -50,6 +50,11 @@ class IntroState extends State
     }
 
     override private function reset():Void {
+        GameLog.log( {
+            level: PlayState.currentCase,
+            event: "intro"
+        } );
+
         addChild( PlayState.cursor );
         addChild( toolbar );
         toolbar.setActiveTool( TOOL_POINT );

@@ -364,6 +364,11 @@ class PlayState extends State
     
 
     override private function reset():Void {
+        GameLog.log( {
+            level: currentCase,
+            event: "play"
+        } );
+
         addChild( cursor );
         toolbarLayer.addChild( toolbar );
         toolbar.setActiveTool( TOOL_POINT );

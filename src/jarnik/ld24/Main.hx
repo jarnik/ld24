@@ -157,8 +157,8 @@ class Main extends Sprite
         h = 320;       
         upscale = Lib.current.stage.stageWidth / w;
 
-        //GameLog.init( "passengers-02", "http://www.jarnik.com/amfphp/gateway.php" );
-        //GameLog.start();
+        GameLog.init( "ld24-darwin", "http://www.jarnik.com/amfphp/gateway.php" );
+        GameLog.start();
         PlayState.init( stateLayer.stage );
         switchState( STATE_TITLE );
         //switchState( STATE_PLAY );

@@ -82,6 +82,10 @@ class TitleState extends State
     
 
     override private function reset():Void {
+        GameLog.log( {
+            level: PlayState.currentCase,
+            event: "start"
+        } );
     }
 
     override public function update( timeElapsed:Float ):Void {
