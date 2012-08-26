@@ -123,7 +123,7 @@ class Alien extends Sprite
 
     public static function getRandomConfig():AlienConfig {
         return {
-            legs: Math.floor( 5 * Math.random() ),
+            legs: Math.ceil( 5 * Math.random() ),
             body: Math.floor( 4 * Math.random() ),
             bodyColor: Math.floor( Math.random() * BODY_COLORS.length ),
             spotColor: Math.floor( Math.random() * SPOT_COLORS.length ),

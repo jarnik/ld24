@@ -48,6 +48,17 @@ typedef GroupConfig = {
 
 class PlayState extends State 
 {
+
+    public static inline var tips:Array<String> = [
+        "Horns are always inherited from paternal side.",
+        "Anntenae is always inherited from maternal side.",
+        "Body color is always inherited from paternal side.",
+        "Spot color is always inherited from maternal side.",
+        "Leg count is always inherited as an average of mother's and father's, with rounding up.",
+        "Eye count is always inherited as an average of mother's and father's, with rounding down.",
+        "Robustness is always inherited as an average of mother's and father's, with rounding down."
+    ];
+
     private var markers:Array<Bitmap>;
     private var thumbs:Array<Sprite>;
     private var currentMarker:Int;
@@ -115,10 +126,11 @@ class PlayState extends State
         var mendel:Sprite;
         addChild( mendel = new Sprite());
         mendel.addChild( new Bitmap(Assets.getBitmapData( "assets/mendel.png" ), nme.display.PixelSnapping.AUTO, false ) );
-        mendel.scaleX = 2;
+        mendel.scaleX = -2;
         mendel.scaleY = 2;
         mendel.y = Main.h - mendel.height;
-        mendel.x = Main.w - mendel.width;
+        mendel.x = Main.w;
+        mendel.addEventListener( MouseEvent.CLICK, mendelClickHandler );
 
         addChild( dialogue = new Dialogue() );
 
@@ -383,6 +395,14 @@ class PlayState extends State
                done = Alien.equal( photos[1].alien, Alien.breed( selected[ 0 ].config, photos[0].alien ) ); 
         }
         Main.log("done? "+done);
+        if ( done )
+            dialogue.play([
+                { l:"That's him! Get him, Mendel!" }
+            ])
+        else
+            dialogue.play([
+                { l:"I think, you got it wrong, boss...", img:"mendel" }
+            ]);
     }
 
     private function onMouseMoveHandler( e:MouseEvent ):Void {
@@ -401,6 +421,12 @@ class PlayState extends State
         if ( photo.visible ) {
             photo.hide();
         }
+    }
+
+    private function mendelClickHandler( e:MouseEvent ):Void {
+        dialogue.play([
+            { l: tips[ Math.floor( Math.random()*tips.length ) ] , img:"mendel" }
+        ]);
     }
 
     private function alienClickHandler( e:MouseEvent ):Void {

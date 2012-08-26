@@ -49,6 +49,7 @@ class Dialogue extends Sprite
 
     private var speakerLayer:Sprite;
     private var speakerBitmap:Bitmap;
+    private var speakerImg:String;
 
 	public function new () 
 	{
@@ -91,7 +92,8 @@ class Dialogue extends Sprite
         bullet.x = -bullet.width; bullet.y = 64 - bullet.height/2;
         speakerLayer.addChild( spr = new Sprite() );
         spr.addChild( bmp = new Bitmap(Assets.getBitmapData( "assets/darwin.png" ), nme.display.PixelSnapping.AUTO, false ) );
-        bmp.scaleX = 2; bmp.scaleY = 2;
+        bmp.scaleX = -2; bmp.scaleY = 2;
+        bmp.x = bmp.width;
         speakerBitmap = bmp;
         spr.addEventListener( MouseEvent.CLICK, speakerClickHandler );
 
@@ -178,14 +180,22 @@ class Dialogue extends Sprite
         moodRequired = 0;
 
         var left:Bool = (script[ currentLine ].img == null );
+        if ( !left )
+            speakerLayer.visible = true;
         speech.scaleX = ( left ? 1 : -1 );
         speech.x = ( left ? 0 : speech.width );
+        if ( !left && speakerImg != script[ currentLine ].img ) {
+            speakerImg = script[ currentLine ].img;
+            speakerBitmap.bitmapData = Assets.getBitmapData("assets/"+speakerImg+".png");
+        }
     }
 
     public function play( script:Script ):Void {
+        tf.text = "";
         show();
         mood = 0;
         currentLine = -1;
+        speakerLayer.visible = false;
         this.script = script;
         nextLine();
     }
