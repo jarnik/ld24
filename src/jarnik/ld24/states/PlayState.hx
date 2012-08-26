@@ -55,6 +55,7 @@ typedef GroupConfig = {
     var size:Float;
     var xscatter:Float;
     var yscatter:Float;
+    var repeat:Int;
     var match:MATCH_TYPE;
 }
 
@@ -101,6 +102,7 @@ class PlayState extends State
            size: 1,
            xscatter: 0,
            yscatter: 0,
+           repeat: 1,
            match: FIND_FATHER
        },
        outro: [
@@ -129,6 +131,7 @@ class PlayState extends State
             size: 0.5,
             xscatter: 1,
             yscatter: 1,
+            repeat: 1,
             match: FIND_KID
         },
         outro: [
@@ -157,6 +160,7 @@ class PlayState extends State
             size: 0.6,
             xscatter: 0.2,
             yscatter: 0.2,
+            repeat: 1,
             match: FIND_PARENTS
         },
         outro: [
@@ -186,23 +190,36 @@ class PlayState extends State
             size: 0.8,
             xscatter: 0.1,
             yscatter: 0.3,
+            repeat: 1,
             match: FIND_KID
         },
         outro: [
             { l:"Yeah, I think that's him. Let's greet him and get a drink together.", img:"mendel" }
         ]
     },{ // bus crash, find parents
-        intro: [],
-        brief: [],
+        intro: [
+            { l:"Detective, turn on the TV!", img:"mendel" },
+            { l:"What? Why?" },
+            { l:"We're bringing you a breaking news - a serious traffic accident has happened at the highway exit.", img:"anon" },
+            { l:"A train has crashed into a school bus full of blobs on a railroad crossing. More details in a moment...", img:"anon" },
+            { l:"I know that place, it's just round the corner. Let's get there.", img:"mendel" },
+            { l:"I'll get my coat." }
+        ],
+        brief: [
+            { l:"We have to get them out, Darwin! All of them! Here, take this kid to its parents.", img:"mendel" }
+        ],
         group: {
-            count: 8,
-            select: 1,
+            count: 6,
+            select: 2,
             size: 1,
-            xscatter: 0.2,
-            yscatter: 0,
+            xscatter: 0.6,
+            yscatter: 0.8,
+            repeat: 3,
             match: FIND_PARENTS
         },
-        outro: []
+        outro: [
+            { l: "Oh, our baby. Thank you!", img:"anon" }
+        ]
     }
     ];
     public static var currentCase:Int;
@@ -221,6 +238,7 @@ class PlayState extends State
     private var toolbarLayer:Sprite;
     private var dialogue:Dialogue;
     private var finished:Bool;
+    private var repeatCount:Int;
 
     public static var cursor:AnimatedSprite;
     public static var cursorOffset:Point;
@@ -235,7 +253,7 @@ class PlayState extends State
         cursor.mouseEnabled = false;
         cursorOffset = new Point();
         //currentCase = 0;
-        currentCase = 3;
+        currentCase = 4;
         toolbar = new Toolbar();
         stage.addEventListener( MouseEvent.MOUSE_MOVE, onMouseMoveHandler );        
     }
@@ -350,6 +368,7 @@ class PlayState extends State
         toolbarLayer.addChild( toolbar );
         toolbar.setActiveTool( TOOL_POINT );
         finished = false;
+        repeatCount = 0;
 
         createScene( cases[ currentCase ].group );
         dialogue.play( cases[ currentCase ].brief );
@@ -431,11 +450,18 @@ class PlayState extends State
         if ( dialogue.shown() )
             dialogue.update( timeElapsed );
         else if ( finished ) {
-            currentCase++;
-            if ( currentCase >= cases.length )
-                Main.switchState( STATE_END );
-            else
-                Main.switchState( STATE_INTRO );
+            repeatCount++;
+            if ( repeatCount >= config.repeat ) {
+                currentCase++;
+                if ( currentCase >= cases.length )
+                    Main.switchState( STATE_END );
+                else
+                    Main.switchState( STATE_INTRO );
+            } else {
+                finished = false;
+                createScene( cases[ currentCase ].group );
+                dialogue.play( cases[ currentCase ].brief );
+            }
         }
     }
 
