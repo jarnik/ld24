@@ -69,7 +69,8 @@ class PlayState extends State
     public static inline var cases:Array<CaseConfig> = [
     { // cheating wife, find father
        intro: [ 
-           { l:"I've had a bad feeling about this evening..." }, 
+           { l:"I had a bad feeling about that evening..." },
+           { l:"A night sky was black as a yesterday's coffee and gathering clouds were promising another heavy storm." }, 
            { l:"When suddenly, one of those damned squishy blobs came punching at my door." }, 
            { l:"Detective, I need your help.", img:"anon" }, 
            { l:"All right, come in and sit over there." }, 
@@ -90,7 +91,6 @@ class PlayState extends State
            { l:"Ok. So which one of these is our man...?" }, 
            { l:"Don't forget to check out the clue photos - they're at the top of your desk.", img:"mendel" }, 
        ],
-       //scene: { bgr: "somepicture.png" },
        group: {
            count: 5,
            select: 1,
@@ -102,26 +102,61 @@ class PlayState extends State
        outro: [
            { l:"Come with me. There's a certain gentleman who might want to have a word with you." } 
        ]                
-    }/*,{ // cheating wife, find father
-       intro: [ 
-           { l:"2 I've had a bad feeling about this evening..." }, 
-       ],
-       brief: [
-           { l:"2 Here's a group of thugs I'm suspecting to be genetic father to that kid." }, 
-       ],
-       //scene: { bgr: "somepicture.png" },
-       group: {
-           count: 5,
-           select: 1,
-           size: 1,
-           xscatter: 0,
-           yscatter: 0,
-           match: FIND_FATHER
-       },
-       outro: [
-           { l:"Come with me. There's a certain gentleman who might want to have a word with you." } 
-       ]                
-    }*/
+    },{ // lost kid, find among orphans
+        intro: [
+            { l:"" },
+            { l:"" },
+            { l:"" },
+            { l:"" },
+            { l:"" },
+        ],
+        brief: [],
+        group: {
+            count: 8,
+            select: 1,
+            size: 0.5,
+            xscatter: 1,
+            yscatter: 1,
+            match: "FIND_KID"
+        },
+        outro: []
+    },{ // triple parents - find 3 parents
+        intro: [],
+        brief: [],
+        group: {
+            count: 5,
+            select: 3,
+            size: 1,
+            xscatter: 0.2,
+            yscatter: 0,
+            match: "FIND_PARENT_TRIO"
+        },
+        outro: []
+    },{ // brother
+        intro: [],
+        brief: [],
+        group: {
+            count: 5,
+            select: 1,
+            size: 1,
+            xscatter: 0.1,
+            yscatter: 0,
+            match: "FIND_BROTHER"
+        },
+        outro: []
+    },{ // bus crash, find parents
+        intro: [],
+        brief: [],
+        group: {
+            count: 8,
+            select: 1,
+            size: 1,
+            xscatter: 0.2,
+            yscatter: 0,
+            match: "FIND_PARENTS"
+        },
+        outro: []
+    }
     ];
     public static var currentCase:Int;
 
@@ -152,7 +187,8 @@ class PlayState extends State
         cursor = new AnimatedSprite("assets/hands.png",55,55);
         cursor.mouseEnabled = false;
         cursorOffset = new Point();
-        currentCase = 0;
+        //currentCase = 0;
+        currentCase = 1;
         toolbar = new Toolbar();
         stage.addEventListener( MouseEvent.MOUSE_MOVE, onMouseMoveHandler );        
     }
@@ -219,61 +255,7 @@ class PlayState extends State
 
         /*
         cases = [
-            { // cheating wife, find father
-                intro: [ 
-                        ],
-                brief: [
-                    { l:"Here's a group of thugs I'm suspecting to be genetic father to that kid." }, 
-                ],
-                scene: { bgr: "somepicture.png" },
-                group: {
-                    count: 5,
-                    select: 1,
-                    size: 1,
-                    xscatter: 0,
-                    yscatter: 0,
-                    match: "FIND_FATHER"
-                }
-                outro: [
-                    { l:"Come with me. There's a certain gentleman who might want to have a word with you." } 
-                ]                
-            },{ // lost kid, find among orphans
-                group: {
-                    count: 8,
-                    select: 1,
-                    size: 0.5,
-                    xscatter: 1,
-                    yscatter: 1,
-                    match: "FIND_KID"
-                }
-            },{ // triple parents - find 3 parents
-                group: {
-                    count: 5,
-                    select: 3,
-                    size: 1,
-                    xscatter: 0.2,
-                    yscatter: 0,
-                    match: "FIND_PARENT_TRIO"
-                }
-            },{ // brother
-                group: {
-                    count: 5,
-                    select: 1,
-                    size: 1,
-                    xscatter: 0.1,
-                    yscatter: 0,
-                    match: "FIND_BROTHER"
-                }
-            },{ // bus crash, find parents
-                group: {
-                    count: 8,
-                    select: 1,
-                    size: 1,
-                    xscatter: 0.2,
-                    yscatter: 0,
-                    match: "FIND_PARENTS"
-                }
-            }
+            
 
         ]*/
         
